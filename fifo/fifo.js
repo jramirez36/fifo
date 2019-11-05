@@ -13,6 +13,8 @@ class Administracion
         let aux2 = this._listaProcesos;
         let probabilidad = new Probabilidades();
         let contadorEspera = 0;
+        let contadorvacio = 0;
+        let contadorCompletados = 0;
         for(var i = 0; i < 300; i++)
         {
             console.log(i)
@@ -20,7 +22,7 @@ class Administracion
             {
                 aux._cantidadTareas = probabilidad.cantidadTareas;
             }
-            this.proceso(contadorEspera, aux2);
+            this.proceso(contadorEspera, aux2, contadorvacio, contadorCompletados);
             if(probabilidad.probabilidadNuevoProceso === 1)
             {
                 contadorEspera++;
@@ -30,17 +32,30 @@ class Administracion
             }
             if(aux2._cantidadTareas <= 0 && contadorEspera >= 1)
             {
+                contadorCompletados++;
                 aux2 = aux2._siguiente;
                 contadorEspera--;
             }
+            if(aux2._cantidadTareas <= 0 && contadorEspera === 0)
+            {
+                contadorvacio++;
+            }
         }
     }
-    proceso(contadorEspera, aux2)
+    proceso(contadorEspera, aux2, contadorvacio, contadorCompletados)
     {
+        let sumador = 0;
+        let aux3 = aux2;
         aux2._cantidadTareas = aux2._cantidadTareas-1;
-        console.log("aqui "+ aux2._cantidadTareas);
             this.impresion(aux2)
-            console.log("Procesos en cola: " + contadorEspera)
+            for(let i = 0; i < contadorEspera; i++)
+            {
+                sumador = sumador + aux3._cantidadTareas;
+                aux3 = aux3._siguiente;
+            }
+            console.log("Procesos en cola: " + contadorEspera + " Suma de tareas totales faltantes: " + sumador);
+            console.log("Cantidad de veces que a estado vacio: " + contadorvacio);
+            console.log("Procesos completados: " + contadorCompletados);
     }
     impresion(aux2) 
     {
